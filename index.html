@@ -324,29 +324,33 @@ function submitCapture(){
 
   leadData={prenom,nom,email};
 
-  /* ═══════════════════════════════════════════════════════════════
-     ⬇️  C'EST ICI QUE TU BRANCHES TON OUTIL D'EMAILING  ⬇️
-     ───────────────────────────────────────────────────────────────
-     Une fois ton compte MailerLite ou Brevo créé, tu remplaces
-     le bloc ci-dessous par le code fourni par ton outil.
-     Les données sont déjà prêtes dans : leadData.prenom,
-     leadData.nom, leadData.email
+  // Désactiver le bouton le temps de l'envoi
+  const btn=document.querySelector('#screen-capture .btn-primary');
+  if(btn){ btn.disabled=true; btn.textContent="Un instant…"; }
 
-     Exemple (MailerLite — à adapter avec TON URL de formulaire) :
+  // ── Envoi vers MailerLite (compte 2407614 / formulaire 189373457677419789) ──
+  const formData=new FormData();
+  formData.append("fields[email]", email);
+  formData.append("fields[name]", prenom);
+  formData.append("fields[last_name]", nom);
+  formData.append("ml-submit", "1");
+  formData.append("anticsrf", "true");
 
-     fetch("https://assets.mailerlite.com/jsonp/XXXX/forms/YYYY/subscribe", {
-       method:"POST",
-       headers:{ "Content-Type":"application/json" },
-       body: JSON.stringify({
-         fields:{ name:leadData.prenom, last_name:leadData.nom, email:leadData.email }
-       })
-     });
+  fetch("https://assets.mailerlite.com/jsonp/2407614/forms/189373457677419789/subscribe", {
+    method:"POST",
+    body:formData,
+    mode:"no-cors"
+  }).then(function(){
+    proceedToQuiz();
+  }).catch(function(){
+    // Même en cas d'erreur réseau, on laisse la personne accéder à son résultat
+    proceedToQuiz();
+  });
+}
 
-     Tant que ce bloc n'est pas branché, l'email n'est PAS stocké —
-     le quiz passe directement au résultat (utile pour tester).
-     ═══════════════════════════════════════════════════════════════ */
-
-  // Passage au quiz
+function proceedToQuiz(){
+  const btn=document.querySelector('#screen-capture .btn-primary');
+  if(btn){ btn.disabled=false; btn.textContent="Découvrir mon cheminement"; }
   document.getElementById('screen-capture').style.display='none';
   startQuiz();
 }
