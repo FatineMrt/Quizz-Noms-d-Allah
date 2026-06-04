@@ -330,24 +330,35 @@ function submitCapture(){
   const btn=document.querySelector('#screen-capture .btn-primary');
   if(btn){ btn.disabled=true; btn.textContent="Un instant…"; }
 
-  // ── Envoi vers MailerLite (compte 2407614 / formulaire 189373457677419789) ──
-  const formData=new FormData();
-  formData.append("fields[email]", email);
-  formData.append("fields[name]", prenom);
-  formData.append("fields[last_name]", nom);
-  formData.append("ml-submit", "1");
-  formData.append("anticsrf", "true");
+  // ── Envoi vers MailerLite via formulaire réel ciblant un iframe caché ──
+  // (méthode fiable cross-origin : le navigateur soumet un vrai <form>,
+  //  la réponse atterrit dans l'iframe invisible, MailerLite enregistre l'inscription)
+  try {
+    var iframe=document.getElementById('ml-sink');
+    if(!iframe){
+      iframe=document.createElement('iframe');
+      iframe.name='ml-sink';
+      iframe.id='ml-sink';
+      iframe.style.display='none';
+      document.body.appendChild(iframe);
+    }
+    var f=document.createElement('form');
+    f.action="https://assets.mailerlite.com/jsonp/2407614/forms/189373457677419789/subscribe";
+    f.method="post";
+    f.target="ml-sink";
+    f.style.display='none';
+    function addField(name,val){ var i=document.createElement('input'); i.type='hidden'; i.name=name; i.value=val; f.appendChild(i); }
+    addField("fields[email]", email);
+    addField("fields[name]", prenom);
+    addField("fields[last_name]", nom);
+    addField("ml-submit", "1");
+    addField("anticsrf", "true");
+    document.body.appendChild(f);
+    f.submit();
+  } catch(e){ /* on continue quoi qu'il arrive */ }
 
-  fetch("https://assets.mailerlite.com/jsonp/2407614/forms/189373457677419789/subscribe", {
-    method:"POST",
-    body:formData,
-    mode:"no-cors"
-  }).then(function(){
-    proceedToQuiz();
-  }).catch(function(){
-    // Même en cas d'erreur réseau, on laisse la personne accéder à son résultat
-    proceedToQuiz();
-  });
+  // On laisse 1,2s à l'envoi puis on passe au quiz
+  setTimeout(proceedToQuiz, 1200);
 }
 
 function proceedToQuiz(){
