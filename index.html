@@ -22,6 +22,19 @@
   .btn-primary::after { content:''; position:absolute; inset:-3px; border:1px solid var(--gold); opacity:0; transition:opacity 0.3s; }
   .btn-primary:hover { background:var(--accent); transform:translateY(-1px); }
   .btn-primary:hover::after { opacity:1; }
+  #screen-capture { text-align:center; animation:fadeUp 0.8s ease both; }
+  .capture-form { display:flex; flex-direction:column; gap:1rem; max-width:400px; margin:0 auto; text-align:left; }
+  .field-label { font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.35rem; display:block; }
+  .field-input { width:100%; background:rgba(255,255,255,0.5); border:1px solid rgba(184,154,90,0.4); padding:0.85rem 1rem; font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--ink); transition:border-color 0.25s, background 0.25s; }
+  .field-input:focus { outline:none; border-color:var(--gold); background:rgba(255,255,255,0.8); }
+  .field-input::placeholder { color:var(--sand); font-style:italic; }
+  .field-row { display:flex; gap:0.8rem; }
+  .field-row > div { flex:1; }
+  .consent { display:flex; align-items:flex-start; gap:0.6rem; margin-top:0.4rem; font-size:0.9rem; color:var(--muted); line-height:1.5; cursor:pointer; }
+  .consent input { margin-top:0.25rem; accent-color:var(--gold); width:16px; height:16px; flex-shrink:0; cursor:pointer; }
+  .form-error { color:var(--accent); font-size:0.9rem; min-height:1.2rem; text-align:center; font-style:italic; }
+  .capture-note { font-size:0.82rem; color:var(--sand); margin-top:1.2rem; font-style:italic; line-height:1.5; }
+  .capture-intro { font-size:1rem; color:var(--ink); margin-bottom:1.2rem; font-style:italic; }
   #screen-quiz { display:none; }
   .progress-bar { width:100%; height:2px; background:rgba(184,154,90,0.2); margin-bottom:2.2rem; border-radius:2px; overflow:hidden; }
   .progress-fill { height:100%; background:var(--gold); transition:width 0.5s ease; border-radius:2px; }
@@ -34,6 +47,7 @@
   .choice-btn:hover { border-color:var(--gold); transform:translateX(4px); }
   .choice-btn:hover::before { width:100%; }
   .choice-btn.selected { border-color:var(--gold); background:rgba(184,154,90,0.08); color:var(--accent); }
+  .choice-desc { display:block; font-size:0.86rem; color:var(--muted); font-style:italic; margin-top:0.25rem; }
   .back-link { display:block; text-align:center; margin-top:1.6rem; font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--sand); cursor:pointer; background:none; border:none; font-family:'Cormorant Garamond',serif; width:100%; transition:color 0.3s; }
   .back-link:hover { color:var(--accent); }
   #screen-result { display:none; }
@@ -53,20 +67,6 @@
   .btn-restart:hover { background:var(--gold); color:var(--ink); }
   @keyframes fadeUp { from {opacity:0; transform:translateY(16px);} to {opacity:1; transform:translateY(0);} }
   .fade-in { animation:fadeUp 0.5s ease both; }
-  /* ── CAPTURE ── */
-  #screen-capture { text-align:center; animation:fadeUp 0.8s ease both; }
-  .capture-form { display:flex; flex-direction:column; gap:1rem; max-width:400px; margin:0 auto; text-align:left; }
-  .field-label { font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:0.35rem; display:block; }
-  .field-input { width:100%; background:rgba(255,255,255,0.5); border:1px solid rgba(184,154,90,0.4); padding:0.85rem 1rem; font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--ink); transition:border-color 0.25s, background 0.25s; }
-  .field-input:focus { outline:none; border-color:var(--gold); background:rgba(255,255,255,0.8); }
-  .field-input::placeholder { color:var(--sand); font-style:italic; }
-  .field-row { display:flex; gap:0.8rem; }
-  .field-row > div { flex:1; }
-  .consent { display:flex; align-items:flex-start; gap:0.6rem; margin-top:0.4rem; font-size:0.9rem; color:var(--muted); line-height:1.5; cursor:pointer; }
-  .consent input { margin-top:0.25rem; accent-color:var(--gold); width:16px; height:16px; flex-shrink:0; cursor:pointer; }
-  .form-error { color:var(--accent); font-size:0.9rem; min-height:1.2rem; text-align:center; font-style:italic; }
-  .capture-note { font-size:0.82rem; color:var(--sand); margin-top:1.2rem; font-style:italic; line-height:1.5; }
-  .capture-intro { font-size:1rem; color:var(--ink); margin-bottom:1.2rem; font-style:italic; }
 </style>
 </head>
 <body>
@@ -76,34 +76,21 @@
     <div class="bismillah">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1618;&#1605;&#1614;&#1648;&#1606;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1616;&#1610;&#1605;&#1616;</div>
     <h1 class="intro-title">Quel Nom d'Allah<br>as-tu besoin <em>en ce moment</em>&nbsp;?</h1>
     <div class="divider"></div>
-    <p class="intro-sub">Parmi Ses plus beaux Noms, il y en a un qui r&eacute;pond exactement &agrave; ce que ton c&oelig;ur traverse aujourd'hui.<br>Six questions pour te guider vers lui.</p>
+    <p class="intro-sub">Parmi Ses plus beaux Noms, il y en a un qui r&eacute;pond exactement &agrave; ce que ton c&oelig;ur traverse aujourd'hui.<br>Quelques questions pour te guider vers lui.</p>
     <button class="btn-primary" onclick="goToCapture()">Commencer</button>
   </div>
-
   <div id="screen-capture" style="display:none;">
     <div class="ornament">&#10022;</div>
-    <h1 class="intro-title">Avant de commencer…</h1>
+    <h1 class="intro-title">Avant de commencer&hellip;</h1>
     <p class="intro-sub">Ton parcours est personnel et confidentiel : le Nom que tu recevras &agrave; la fin reste le tien.</p>
     <p class="capture-intro">Pour rester en lien apr&egrave;s ce cheminement :</p>
     <div class="capture-form">
       <div class="field-row">
-        <div>
-          <label class="field-label" for="cap-prenom">Pr&eacute;nom</label>
-          <input class="field-input" type="text" id="cap-prenom" placeholder="Ton pr&eacute;nom" autocomplete="given-name">
-        </div>
-        <div>
-          <label class="field-label" for="cap-nom">Nom</label>
-          <input class="field-input" type="text" id="cap-nom" placeholder="Ton nom" autocomplete="family-name">
-        </div>
+        <div><label class="field-label" for="cap-prenom">Pr&eacute;nom</label><input class="field-input" type="text" id="cap-prenom" placeholder="Ton pr&eacute;nom" autocomplete="given-name"></div>
+        <div><label class="field-label" for="cap-nom">Nom</label><input class="field-input" type="text" id="cap-nom" placeholder="Ton nom" autocomplete="family-name"></div>
       </div>
-      <div>
-        <label class="field-label" for="cap-email">Adresse e-mail</label>
-        <input class="field-input" type="email" id="cap-email" placeholder="ton@email.com" autocomplete="email">
-      </div>
-      <label class="consent">
-        <input type="checkbox" id="cap-consent">
-        <span>J'accepte de recevoir mon r&eacute;sultat et les messages de Fatine par e-mail. Je peux me d&eacute;sinscrire &agrave; tout moment.</span>
-      </label>
+      <div><label class="field-label" for="cap-email">Adresse e-mail</label><input class="field-input" type="email" id="cap-email" placeholder="ton@email.com" autocomplete="email"></div>
+      <label class="consent"><input type="checkbox" id="cap-consent"><span>J'accepte de recevoir les messages de Fatine par e-mail. Je peux me d&eacute;sinscrire &agrave; tout moment.</span></label>
       <div class="form-error" id="cap-error"></div>
       <button class="btn-primary" onclick="submitCapture()" style="margin-top:0.3rem;">D&eacute;couvrir mon cheminement</button>
     </div>
@@ -131,184 +118,211 @@
   </div>
 </div>
 <script>
-const NOMS = {
-  Al_Jabbar:{arabic:"الجَبَّار",translit:"Al-Djabbâr",fr:"Celui qui répare et impose Son ordre",meaning:"Al-Djabbâr domine toute chose et redresse ce qui a été courbé. Rien ne peut repousser Son décret. Ce qui te semble irréparable, Il a maîtrise dessus.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Djabbâr, Toi qui as maîtrise sur toute chose, redresse ce qui s'est brisé en moi. »"},
-  Al_Shafi:{arabic:"الشَّافِي",translit:"As-Shâfî",fr:"Le Guérisseur",meaning:"As-Shâfî guérit les poitrines des doutes, des passions, de la rancune et de la jalousie, autant que les maux du corps. Il n'y a pas d'autre guérison que la Sienne. Le meilleur moyen de la récolter est l'invocation sincère.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Shâfî, dissipe le mal et guéris-moi d'une guérison qui ne laisse aucun mal après elle. »"},
-  Al_Moumine:{arabic:"المُؤمِن",translit:"Al-Moumine",fr:"Celui qui rassure et apaise",meaning:"Al-Moumine réconforte et apaise celui qui a peur. C'est l'opposé de l'intimidation. Parmi les grandes manifestations de Sa sécurité : Il apaise Ses serviteurs croyants quand ils sont en difficulté.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Moumine, remplace ma peur par Ta sécurité. Apaise ce qui tremble en moi. »"},
-  At_Tawwab:{arabic:"التَّوَّاب",translit:"At-Tawwâb",fr:"Celui qui accueille le retour",meaning:"At-Tawwâb accueille le repentir de qui Il veut en lui donnant l'occasion même de venir à Son pardon. Quand tu reviens vers Lui, c'est Lui qui t'a facilité ce retour — et cela est déjà un immense bienfait de Sa part.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Tawwâb, facilite-moi le retour vers Toi. Que la honte ne soit pas un mur entre nous. »"},
-  Al_Ghaffar:{arabic:"الغَفَّار",translit:"Al-Ghaffâr",fr:"Celui qui pardonne sans cesse",meaning:"Al-Ghaffâr pardonne sans cesse, les péchés les plus grands comme les plus petits, encore et encore. À celui qui se repent, croit et se remet sur le bon chemin, Il est Grand Pardonneur.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Ghaffâr, Toi qui pardonnes sans te lasser, ne me laisse pas désespérer de revenir. »"},
-  Al_Afouww:{arabic:"العَفُوّ",translit:"Al-'Afouww",fr:"Celui qui efface",meaning:"Al-'Afouww efface les péchés et passe outre les désobéissances. Il est plus fort encore qu'Al-Ghafour : là où le pardon dissimule la faute, l'absolution, elle, l'efface entièrement.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ 'Afouww, Toi qui aimes effacer, efface ce qui me pèse comme s'il n'avait jamais été. »"},
-  As_Sittir:{arabic:"السِّتِّير",translit:"As-Sittîr",fr:"Celui qui couvre",meaning:"As-Sittîr couvre énormément Ses serviteurs et ne les expose pas aux regards. Malgré qu'on ne cesse de Lui désobéir, Il honore et recouvre par pudeur et par miséricorde. As-Sittîr est la première étape de ton repentir.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Sittîr, Toi qui couvres mes défauts, continue de me couvrir et guide-moi vers le retour. »"},
-  Al_Halim:{arabic:"الحَلِيم",translit:"Al-Halîm",fr:"Le Très Doux",meaning:"Al-Halîm ne S'empresse pas de châtier Ses serviteurs malgré leurs péchés. Il les voit Le renier et Lui désobéir, et fait preuve d'indulgence. Cette indulgence n'est pas faiblesse : elle est fondée sur Sa Science et Sa Puissance.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Halîm, Toi qui ne te hâtes pas, accorde-moi le temps de revenir et de me corriger. »"},
-  Al_Hadi:{arabic:"الهَادِي",translit:"Al-Hâdî",fr:"Celui qui guide",meaning:"Al-Hâdî guide ceux qui sont sous Son ordre, les dirige et leur montre où se trouve leur bonheur, dans ce bas-monde et dans l'au-delà. Ton Seigneur suffit comme guide.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hâdî, montre-moi où se trouve mon bien. Guide mon prochain pas. »"},
-  An_Nur:{arabic:"النُّور",translit:"An-Nûr",fr:"La Lumière",meaning:"Allah est la Lumière des cieux et de la terre. Il y a la lumière par laquelle Il illumine les cœurs de Ses alliés : la lumière de Sa connaissance et de Son amour. Dès qu'elle atteint le cœur, elle inonde le visage puis les membres.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Nûr, mets de la lumière dans mon cœur, ma vision et mon chemin. »"},
-  Al_Fattah:{arabic:"الفَتَّاح",translit:"Al-Fattâh",fr:"Celui qui ouvre",meaning:"Al-Fattâh ouvre à Ses fidèles toutes les portes du bien, ici-bas comme dans l'au-delà. Il résout leurs difficultés et leur ouvre les portes verrouillées. Ce qu'Il ouvre, nul ne peut le retenir.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Fattâh, ouvre-moi la porte que je ne parviens pas à ouvrir. »"},
-  Al_Hakim:{arabic:"الحَكِيم",translit:"Al-Hakîm",fr:"Le Sage",meaning:"Al-Hakîm détient une parfaite sagesse, qui se manifeste dans chacun de Ses actes. Personne ne peut la questionner ni la remettre en cause. Tout ce qu'Il décrète, tout ce qu'Il prescrit, recèle un bien et une protection.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hakîm, fais-moi confiance en Ta sagesse là où je ne comprends pas encore. »"},
-  Al_Haqq:{arabic:"الحَقّ",translit:"Al-Haqq",fr:"La Vérité",meaning:"Al-Haqq est Celui au sujet Duquel il n'y a aucun doute ni aucune incertitude. Son Essence, Ses Attributs, Ses Actes ne sont que vérité. Toutes les nouvelles qu'Il donne sont authentiques, ainsi que Sa promesse et Sa rencontre.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Haqq, ancre mon cœur dans Ta certitude au milieu de mes doutes. »"},
-  Al_Hafidh:{arabic:"الحَفِيظ",translit:"Al-Hafîdh",fr:"Le Protecteur",meaning:"Al-Hafîdh sauvegarde Ses serviteurs contre tout ce qu'ils détestent : une protection générale qui facilite l'accès aux besoins vitaux, et une protection particulière accordée à Ses alliés, préservant leur foi contre les troubles et les épreuves.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hafîdh, préserve-moi et préserve ma foi de tout ce qui pourrait la troubler. »"},
-  Al_Wakil:{arabic:"الوَكِيل",translit:"Al-Wakîl",fr:"Celui à qui l'on confie tout",meaning:"Al-Wakîl suffit et gère les affaires des êtres vivants. Quand on annonça aux compagnons qu'une armée se rassemblait contre eux, leur foi s'accrut et ils dirent : « Allah nous suffit ; Il est notre meilleur garant. »",prayer:"<strong>Une parole à Lui adresser :</strong> « Hasbiyallâhu wa ni'ma al-wakîl — Allah me suffit, et quel excellent garant. »"},
-  Al_Mawla:{arabic:"المَوْلى",translit:"Al-Mawlâ",fr:"Le Maître, l'Allié",meaning:"Al-Mawlâ implique l'Alliance d'Allah et Son soutien pour Ses serviteurs. « Attachez-vous fortement à Allah. C'est Lui votre Maître. Quel Excellent Maître ! Et quel Excellent Soutien ! »",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Mawlâ, sois mon allié et mon soutien. Quel Excellent Maître Tu es. »"},
-  An_Nassir:{arabic:"النَّصِير",translit:"An-Nassîr",fr:"Le Secoureur",meaning:"An-Nassîr se charge de secourir Ses serviteurs, s'engage à soutenir Ses alliés et à les défendre. La victoire ne vient que de Lui et ne se concrétise que par Sa grâce.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Nassîr, secours-moi et défends-moi, car la victoire ne vient que de Toi. »"},
-  Al_Qadir:{arabic:"القَدِير",translit:"Al-Qadîr",fr:"Le Tout-Capable",meaning:"Al-Qadîr a un pouvoir parfait. Il donne existence aux créatures et les administre de manière sublime. Quand Il veut une chose, Il n'a qu'à dire « Sois » pour qu'elle existe.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Qadîr, Toi à qui il suffit de dire 'Sois', renverse ce qui me semble impossible. »"},
-  Al_Ghalib:{arabic:"الغَالِب",translit:"Al-Ghâlib",fr:"Le Victorieux",meaning:"Al-Ghâlib fait ce qu'Il veut et rien ne peut Le vaincre. Personne ne peut repousser Son jugement, remettre en cause Son décret ou empêcher l'accomplissement de Sa décision. « Assurément, Je triompherai. »",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Ghâlib, Toi que rien ne vainc, je remets mon issue entre Tes mains. »"},
-  Al_Hayy:{arabic:"الحَيّ القَيُّوم",translit:"Al-Hayy Al-Qayyoum",fr:"Le Vivant, Celui qui subsiste par Lui-même",meaning:"Al-Hayy et Al-Qayyoum sont deux Noms extrêmement efficaces contre l'anxiété, les soucis et les peines qui nous affectent. Tout dépend de Lui et aucune créature ne peut se passer de Lui, ne serait-ce le temps d'un clin d'œil.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hayy Yâ Qayyoum, j'implore Ta miséricorde. Améliore toute ma situation et ne m'abandonne pas à moi-même. »"},
-  Al_Qarib:{arabic:"القَرِيب",translit:"Al-Qarîb",fr:"Le Proche",meaning:"Al-Qarîb est proche de nous d'une proximité divine réservée à Ses serviteurs. C'est une proximité qu'on ne peut pleinement saisir, mais dont on ressent les effets à travers Sa bienveillance envers les croyants.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Qarîb, Toi qui es plus proche que je ne le crois, fais-moi ressentir Ta présence. »"},
-  Al_Moujib:{arabic:"المُجِيب",translit:"Al-Moujîb",fr:"Celui qui répond",meaning:"Al-Moujîb entend la supplication de ceux qui L'invoquent et accède à leurs requêtes. Il ne frustre jamais l'espérance du croyant qui L'implore. Au contraire, Il aime qu'on Lui demande tout ce dont on a besoin.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Moujîb, Toi qui réponds toujours, je T'invoque avec la certitude que Tu m'entends. »"},
-  As_Sami:{arabic:"السَّمِيع",translit:"As-Samî'",fr:"Celui qui entend tout",meaning:"As-Samî' entend tous les sons et toutes les voix. À Son ouïe, les paroles secrètes et celles prononcées ouvertement sont égales. Et Son ouïe est aussi exaucement : Il comble celui qui L'invoque, même ce qu'on n'arrive pas à formuler.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Samî', Tu entends même ce que je n'arrive pas à dire. Reçois ce que mon cœur murmure. »"},
-  Al_Wadud:{arabic:"الوَدُود",translit:"Al-Wadûd",fr:"Le Tout Affectueux",meaning:"Al-Wadûd aime Ses serviteurs, et eux L'aiment plus que tout autre. Son affection se manifeste dans le bien qu'Il prodigue jour et nuit, dans Sa patience envers nos péchés, et dans les portes du repentir qu'Il laisse ouvertes.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Wadûd, rappelle-moi que je suis aimée de Toi, même quand je ne me sens pas aimable. »"},
-  Ar_Razzaq:{arabic:"الرَّزَّاق",translit:"Ar-Razzâq",fr:"Le Grand Pourvoyeur",meaning:"Ar-Razzâq amène la subsistance les unes après les autres, dans des nombres que Seul Allah connaît et dans une qualité sublime. Il se porte garant des subsistances de Ses serviteurs et donne à chacun ce dont il a besoin pour vivre.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Razzâq, Toi qui pourvois à tout, ouvre-moi les portes de Ta subsistance. »"},
-  Al_Wahhab:{arabic:"الوَهَّاب",translit:"Al-Wahhâb",fr:"Le Donateur Gracieux",meaning:"Al-Wahhâb dispense les cadeaux, les faveurs et les dons avec générosité. Ce Nom appuie le fait qu'Allah donne de manière continue et sans compter.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Wahhâb, Toi qui donnes sans compter, comble ce qui me manque par Ta générosité. »"},
-  Al_Kafi:{arabic:"الكَافِي",translit:"Al-Kâfî",fr:"Celui qui suffit à tout",meaning:"Al-Kâfî s'occupe de tout ce dont les créatures ont besoin. Le Messager ﷺ disait avant de dormir : « Louange à Allah qui nous a nourris, abreuvés, a suffi à tous nos besoins et nous a abrités. »",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Kâfî, Toi qui suffis à tout, sois Celui qui me suffit. »"},
-  Al_Waassi:{arabic:"الوَاسِع",translit:"Al-Waassi'",fr:"L'Immense",meaning:"Al-Waassi' a des attributs si vastes que nul ne peut faire Ses éloges comme Il le mérite. Il est vaste dans Sa Science, Sa Miséricorde, Sa Subsistance et Sa Bienfaisance — et Il donne la facilité à Ses serviteurs.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Waassi', élargis ce qui est étroit en moi. Tu es plus vaste que tout ce qui me pèse. »"},
-  Al_Karim:{arabic:"الكَرِيم",translit:"Al-Karîm",fr:"Le Généreux",meaning:"Al-Karîm possède le bien en abondance. Sa générosité ne désigne pas seulement le don : elle englobe l'ensemble des qualités de la beauté et du mérite. Le plus grand moyen de gagner Sa générosité est de Le craindre en secret comme en public.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Karîm, Toi dont la générosité n'a pas de limite, traite-moi selon Ta générosité et non selon mon mérite. »"},
-  As_Sabur:{arabic:"الصَّبُور",translit:"As-Sabûr",fr:"Le Très Patient",meaning:"As-Sabûr ne se hâte pas. Il tient, Il attend, Il accompagne dans la durée sans jamais se lasser. Dans Sa patience, Il apprend à Ses serviteurs à porter l'épreuve qui s'étire sans s'effondrer.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Sabûr, infuse en moi une patience qui ne s'épuise pas. Que je tienne, comme Tu tiens. »"}
+const NOMS={
+  Al_Jamil:{arabic:"الجَمِيل",translit:"Al-Jamîl",fr:"Le Très Beau",meaning:"Allah se caractérise par la beauté dans Ses Noms, Ses attributs, Son Essence et Ses actes. Toute beauté, intérieure ou extérieure, dans ce bas-monde comme dans l'au-delà, n'est qu'un effet de Sa beauté à Lui. Ce que tu cherches dans un reflet, Il en est la Source.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Jamîl, Toi de qui vient toute beauté, fais-moi voir la mienne comme un reflet de la Tienne. »"},
+  Al_Karim:{arabic:"الكَرِيم",translit:"Al-Karîm",fr:"Le Généreux",meaning:"Al-Karîm possède le bien en abondance. Sa générosité n'est pas que le don : elle englobe toutes les qualités de la beauté et du mérite. Ta valeur ne se mesure pas à ton regard sur toi, mais à la noblesse qu'Il t'a donnée.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Karîm, Toi dont la générosité n'a pas de limite, traite-moi selon Ta générosité et non selon mon mérite. »"},
+  Al_Moussawwir:{arabic:"المُصَوِّر",translit:"Al-Moussawwir",fr:"Le Formateur",meaning:"Al-Moussawwir est Celui qui modèle les créatures et les êtres comme Il le désire. C'est Lui qui t'a façonnée, trait pour trait. Ce que tu voudrais changer en toi a été dessiné par la plus sage des mains.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Moussawwir, Toi qui m'as façonnée, réconcilie-moi avec la forme que Tu as choisie pour moi. »"},
+  Al_Wadud:{arabic:"الوَدُود",translit:"Al-Wadûd",fr:"Le Tout Affectueux",meaning:"Al-Wadûd aime Ses serviteurs, et eux L'aiment plus que tout autre. Son affection se manifeste dans le bien qu'Il prodigue jour et nuit. L'amour que tu cherches chez les créatures, Il en est la Source qui ne tarit jamais.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Wadûd, rappelle-moi que je suis aimée de Toi, même quand je ne me sens pas aimable. »"},
+  As_Shakour:{arabic:"الشَّكُور",translit:"As-Shakûr",fr:"Le Très Reconnaissant",meaning:"As-Shakûr est Celui auprès de qui l'œuvre et sa récompense ne se perdent jamais. Il multiplie les rétributions sans compter. Ce que tu donnes sans être reconnue par les gens, Lui le voit et le décuple.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Shakûr, Toi auprès de qui rien ne se perd, je dépose entre Tes mains ce que personne ne voit. »"},
+  Al_Qarib:{arabic:"القَرِيب",translit:"Al-Qarîb",fr:"Le Proche",meaning:"Al-Qarîb est proche de nous d'une proximité réservée à Ses serviteurs. On ne peut pleinement la saisir, mais on en ressent les effets dans Sa bienveillance. Dans ta solitude, Il est plus près que tu ne le crois.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Qarîb, Toi qui es plus proche que je ne le crois, fais-moi ressentir Ta présence. »"},
+  Ar_Rauf:{arabic:"الرَّؤُوف",translit:"Ar-Raʾûf",fr:"Le Très Bienveillant",meaning:"Ar-Raʾûf désigne le plus haut degré de la miséricorde, celle qui touche toute la création. Là où le monde te traite avec dureté, Lui t'enveloppe d'une douceur sans mesure.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Raʾûf, Toi dont la douceur dépasse toute douceur, sois tendre avec mon cœur fatigué. »"},
+  Al_Barr:{arabic:"البَرّ",translit:"Al-Barr",fr:"Le Bon, le Charitable",meaning:"Al-Barr est Celui qui embrasse tous les êtres par Sa bonté et Sa bienfaisance. Sa bonté ne dépend pas de ce que tu mérites : elle se déverse, large et constante.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Barr, Toi dont la bonté embrasse tout, fais-moi goûter à Ta bienveillance. »"},
+  Al_Khaliq:{arabic:"الخَالِق",translit:"Al-Khâliq",fr:"Le Créateur",meaning:"Al-Khâliq crée à partir du néant, ce que nulle créature ne peut faire, et mesure chaque chose selon Sa Sagesse. Ce que tu attends et qui ne vient pas, Lui seul peut le faire exister, au moment qu'Il a choisi.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Khâliq, Toi qui crées de rien, fais naître ce que j'attends quand Ta sagesse le voudra. »"},
+  Ar_Razzaq:{arabic:"الرَّزَّاق",translit:"Ar-Razzâq",fr:"Le Grand Pourvoyeur",meaning:"Ar-Razzâq amène la subsistance les unes après les autres, en quantités que Seul Il connaît. Il se porte garant de ta subsistance. Ta peur de manquer s'apaise quand tu sais qui pourvoit.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Razzâq, Toi qui pourvois à tout, ouvre-moi les portes de Ta subsistance. »"},
+  Al_Ghaniyy:{arabic:"الغَنِيّ",translit:"Al-Ghaniyy",fr:"Celui qui se suffit à Lui-même",meaning:"Al-Ghaniyy détient la richesse absolue, sans aucun manque. Il n'a besoin de personne, alors que toutes les créatures ont besoin de Lui. Quand tu dépends des autres, c'est vers Lui, le Riche, qu'il faut tourner ton manque.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Ghaniyy, Toi qui possèdes tout, dispense-moi du besoin des créatures par Ta richesse. »"},
+  Al_Fattah:{arabic:"الفَتَّاح",translit:"Al-Fattâh",fr:"Celui qui ouvre",meaning:"Al-Fattâh ouvre toutes les portes du bien et résout les difficultés. Ce qu'Il ouvre, nul ne peut le retenir. La porte fermée devant toi n'attend que Son décret pour s'ouvrir.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Fattâh, ouvre-moi la porte que je ne parviens pas à ouvrir. »"},
+  Al_Qadir:{arabic:"القَدِير",translit:"Al-Qadîr",fr:"Le Tout-Capable",meaning:"Al-Qadîr a un pouvoir parfait. Quand Il veut une chose, Il n'a qu'à dire « Sois » pour qu'elle existe. Ce qui te semble impossible n'est qu'une parole pour Lui.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Qadîr, Toi à qui il suffit de dire 'Sois', renverse ce qui me semble impossible. »"},
+  As_Shafi:{arabic:"الشَّافِي",translit:"As-Shâfî",fr:"Le Guérisseur",meaning:"As-Shâfî guérit les poitrines des doutes et des passions autant que les maux du corps. Il n'y a pas d'autre guérison que la Sienne, et le meilleur moyen de la récolter est l'invocation sincère.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Shâfî, dissipe le mal et guéris-moi d'une guérison qui ne laisse aucun mal après elle. »"},
+  Al_Moumine:{arabic:"المُؤمِن",translit:"Al-Moumine",fr:"Celui qui rassure et apaise",meaning:"Al-Moumine réconforte et apaise celui qui a peur ; c'est l'opposé de l'intimidation. Parmi les manifestations de Sa sécurité : Il apaise Ses serviteurs croyants quand ils sont en difficulté.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Moumine, remplace ma peur par Ta sécurité. Apaise ce qui tremble en moi. »"},
+  Al_Jabbar:{arabic:"الجَبَّار",translit:"Al-Djabbâr",fr:"Celui qui répare ce qui est brisé",meaning:"Al-Djabbâr domine toute chose et redresse ce qui a été courbé. Rien ne peut repousser Son décret. Ce qui te semble irréparable, Il a maîtrise dessus.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Djabbâr, Toi qui as maîtrise sur toute chose, redresse ce qui s'est brisé en moi. »"},
+  As_Sabur:{arabic:"الصَّبُور",translit:"As-Sabûr",fr:"Le Très Patient",meaning:"As-Sabûr ne se hâte pas. Il tient, Il attend, Il accompagne dans la durée sans jamais se lasser. Dans Sa patience, Il t'apprend à porter l'épreuve qui s'étire sans t'effondrer.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Sabûr, infuse en moi une patience qui ne s'épuise pas. Que je tienne, comme Tu tiens. »"},
+  Al_Hayy:{arabic:"الحَيّ القَيُّوم",translit:"Al-Hayy Al-Qayyoum",fr:"Le Vivant, Celui qui subsiste par Lui-même",meaning:"Al-Hayy et Al-Qayyoum sont extrêmement efficaces contre l'anxiété et les peines. Tout dépend de Lui, et aucune créature ne peut se passer de Lui le temps d'un clin d'œil.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hayy Yâ Qayyoum, j'implore Ta miséricorde. Améliore toute ma situation et ne m'abandonne pas à moi-même. »"},
+  At_Tawwab:{arabic:"التَّوَّاب",translit:"At-Tawwâb",fr:"Celui qui accueille le retour",meaning:"At-Tawwâb accueille le repentir en facilitant Lui-même le retour vers Son pardon. Quand tu reviens vers Lui, c'est Lui qui t'a facilité ce retour — un bienfait avant même le pardon.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Tawwâb, facilite-moi le retour vers Toi. Que la honte ne soit pas un mur entre nous. »"},
+  Al_Ghaffar:{arabic:"الغَفَّار",translit:"Al-Ghaffâr",fr:"Celui qui pardonne sans cesse",meaning:"Al-Ghaffâr pardonne sans cesse, les grands péchés comme les petits, encore et encore. À qui se repent et revient, Il est Grand Pardonneur, sans jamais se lasser.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Ghaffâr, Toi qui pardonnes sans te lasser, ne me laisse pas désespérer de revenir. »"},
+  Al_Afouww:{arabic:"العَفُوّ",translit:"Al-'Afouww",fr:"Celui qui efface",meaning:"Al-'Afouww efface les péchés et passe outre les désobéissances. Plus fort que le pardon qui dissimule : l'absolution, elle, efface entièrement, comme si la faute n'avait jamais été.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ 'Afouww, Toi qui aimes effacer, efface ce qui me pèse comme s'il n'avait jamais été. »"},
+  As_Sittir:{arabic:"السِّتِّير",translit:"As-Sittîr",fr:"Celui qui couvre",meaning:"As-Sittîr couvre énormément Ses serviteurs et ne les expose pas. Malgré la désobéissance, Il recouvre par pudeur et miséricorde. C'est la première étape de ton retour.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Sittîr, Toi qui couvres mes défauts, continue de me couvrir et guide-moi vers le retour. »"},
+  Al_Halim:{arabic:"الحَلِيم",translit:"Al-Halîm",fr:"Le Très Doux",meaning:"Al-Halîm ne S'empresse pas de châtier malgré les péchés. Il voit qu'on Lui désobéit et fait preuve d'indulgence — une indulgence fondée non sur la faiblesse, mais sur Sa Science et Sa Puissance.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Halîm, Toi qui ne te hâtes pas, accorde-moi le temps de revenir et de me corriger. »"},
+  Al_Hadi:{arabic:"الهَادِي",translit:"Al-Hâdî",fr:"Celui qui guide",meaning:"Al-Hâdî guide Ses serviteurs, les dirige et leur montre où se trouve leur bonheur, ici-bas et dans l'au-delà. Quand tu ne sais pas quoi décider, ton Seigneur suffit comme guide.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hâdî, montre-moi où se trouve mon bien. Guide mon prochain pas. »"},
+  An_Nur:{arabic:"النُّور",translit:"An-Nûr",fr:"La Lumière",meaning:"Allah est la Lumière des cieux et de la terre. Il illumine les cœurs de Ses alliés par la lumière de Sa connaissance et de Son amour. Dès qu'elle atteint le cœur, elle inonde le visage et les membres.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Nûr, mets de la lumière dans mon cœur, ma vision et mon chemin. »"},
+  Al_Hakim:{arabic:"الحَكِيم",translit:"Al-Hakîm",fr:"Le Sage",meaning:"Al-Hakîm détient une parfaite sagesse, présente dans chacun de Ses actes. Nul ne peut la remettre en cause. Tout ce qu'Il décrète recèle un bien, même ce que tu ne comprends pas encore.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hakîm, fais-moi confiance en Ta sagesse là où je ne comprends pas encore. »"},
+  Al_Haqq:{arabic:"الحَقّ",translit:"Al-Haqq",fr:"La Vérité",meaning:"Al-Haqq est Celui au sujet Duquel il n'y a aucun doute. Son Essence, Ses attributs, Ses actes ne sont que vérité, ainsi que Sa promesse et Sa rencontre. Un sol ferme quand tes certitudes vacillent.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Haqq, ancre mon cœur dans Ta certitude au milieu de mes doutes. »"},
+  Al_Aziz:{arabic:"العَزِيز",translit:"Al-'Azîz",fr:"Le Tout-Puissant",meaning:"Al-'Azîz réunit les trois sens de la puissance : la force, l'inaccessibilité — nul ne peut L'atteindre — et la capacité à dominer toute la création. Contempler Sa puissance remet chaque chose à sa place.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ 'Azîz, Toi que rien n'atteint, que ma confiance repose sur Ta puissance et non sur la mienne. »"},
+  Al_Kabir:{arabic:"الكَبِير",translit:"Al-Kabîr",fr:"Le Grand, le Sublime",meaning:"Al-Kabîr possède tous les sens de la magnificence et de la majesté : la force, le pouvoir parfait, la science totale. Nul autre que Lui ne mérite d'être magnifié et glorifié.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Kabîr, Toi le Sublime, que mon cœur, ma langue et mes actes T'immensifient. »"},
+  Al_Qawiyy:{arabic:"القَوِيّ",translit:"Al-Qawiyy",fr:"Le Très Fort",meaning:"Al-Qawiyy est Celui que rien ne peut réduire à l'impuissance ni dominer, et dont la décision ne peut être repoussée. Il rend puissant qui Il veut. Sa Force se manifeste dans Son secours aux Prophètes et Sa préservation de la création.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Qawiyy, Toi que rien ne domine, appuie ma faiblesse sur Ta force. »"},
+  Al_Malik:{arabic:"المَلِك",translit:"Al-Malik",fr:"Le Roi, le Souverain",meaning:"Al-Malik possède la royauté : Il est le Propriétaire de tout ce qui existe et fait ce qu'Il veut sans qu'on s'oppose à Son ordre. S'Il est le Roi, c'est qu'il y a un royaume qu'Il gère à la perfection.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Malik, Toi le vrai Souverain, je me soumets à Ton ordre sur ma vie. »"},
+  As_Samad:{arabic:"الصَّمَد",translit:"As-Samad",fr:"Le Soutien absolu",meaning:"As-Samad est le Maître Sublime, détenteur des attributs les plus parfaits, vers qui se tournent toutes les créatures alors que Lui n'a besoin de personne. Il nous rappelle combien nous avons besoin de Lui.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Samad, Toi vers qui tout se tourne, sois mon unique appui. »"},
+  Al_Hamid:{arabic:"الحَمِيد",translit:"Al-Hamîd",fr:"Le Digne de louange",meaning:"Al-Hamîd est Celui qui mérite toute la louange, car tout ce qui provient de Lui n'est que bonté : Ses actes, Ses lois, Ses bienfaits. On Le loue pour Lui-même et pour ce qu'Il donne.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Hamîd, à Toi toute la louange, pour ce que Tu es et pour ce que Tu donnes. »"},
+  Al_Madjid:{arabic:"المَجِيد",translit:"Al-Madjîd",fr:"Le Glorieux",meaning:"Al-Madjîd possède les plus sublimes attributs et une grande quantité de nobles qualités. Il rappelle la perfection du Seigneur des Mondes — tout le Coran est un livre de Sa glorification.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Madjîd, Toi dont la gloire emplit toute chose, que mon cœur s'émerveille de Ta perfection. »"},
+  Al_Ahad:{arabic:"الأَحَد",translit:"Al-Ahad",fr:"L'Unique",meaning:"Al-Ahad est le Seul et l'Unique par excellence : une Essence sans semblable, des actes parfaits, le droit d'être adoré et aimé comme nul autre. Méditer Son unicité recentre tout le cœur.",prayer:"<strong>Une parole à Lui adresser :</strong> « Yâ Ahad, Toi sans semblable, que Tu sois l'Unique vers qui va mon adoration. »"}
 };
 
-// Q1 : zone. Les questions suivantes sont SPÉCIFIQUES à chaque zone (3 questions de plus = 4),
-// puis 2 questions transversales communes = 6 au total. Chaque réponse marque des points.
-const ZONES = {
-  A:{label:"blessure / réparation", pool:["Al_Shafi","Al_Moumine","Al_Jabbar","As_Sabur","Al_Hayy"]},
-  B:{label:"faute / retour", pool:["At_Tawwab","Al_Ghaffar","Al_Afouww","As_Sittir","Al_Halim"]},
-  C:{label:"direction", pool:["Al_Hadi","An_Nur","Al_Fattah","Al_Hakim","Al_Haqq"]},
-  D:{label:"peur / doute", pool:["Al_Hafidh","Al_Wakil","Al_Hayy","Al_Qadir","Al_Ghalib","Al_Mawla","An_Nassir"]},
-  E:{label:"manque / solitude", pool:["Al_Qarib","Al_Moujib","As_Sami","Al_Wadud","Ar_Razzaq","Al_Wahhab","Al_Kafi","Al_Karim","Al_Waassi"]}
+const SPHERES={
+  A:{label:"Mon rapport à moi-même",pool:["Al_Jamil", "Al_Karim", "Al_Moussawwir", "Al_Wadud"]},
+  B:{label:"L'amour et les liens",pool:["Al_Wadud", "As_Shakour", "Al_Qarib", "Ar_Rauf", "Al_Barr"]},
+  C:{label:"Ce que j'attends et qui ne vient pas",pool:["Al_Khaliq", "Ar_Razzaq", "Al_Ghaniyy", "Al_Fattah", "Al_Qadir"]},
+  D:{label:"Une épreuve, une douleur, une peur",pool:["As_Shafi", "Al_Moumine", "Al_Jabbar", "As_Sabur", "Al_Hayy"]},
+  E:{label:"Une faute, un poids sur la conscience",pool:["At_Tawwab", "Al_Ghaffar", "Al_Afouww", "As_Sittir", "Al_Halim"]},
+  F:{label:"Un manque de sens ou de direction",pool:["Al_Hadi", "An_Nur", "Al_Hakim", "Al_Haqq", "Al_Fattah"]},
+  G:{label:"Une envie de Le connaître, de L'aimer plus grand",pool:["Al_Aziz", "Al_Kabir", "Al_Qawiyy", "Al_Malik", "As_Samad", "Al_Hamid", "Al_Madjid", "Al_Ahad", "Al_Jamil"]}
 };
 
-const Q1 = {
-  q:"Qu'est-ce qui occupe ton cœur en ce moment ?",
-  choices:[
-    {t:"Quelque chose est blessé, cassé ou douloureux en moi", zone:"A"},
-    {t:"J'ai fait quelque chose qui me pèse", zone:"B"},
-    {t:"Je ne sais plus où je vais", zone:"C"},
-    {t:"J'ai peur, ou je doute que les choses changent", zone:"D"},
-    {t:"Je me sens seule, ou il me manque quelque chose", zone:"E"}
-  ]
-};
+const Q1={q:"En ce moment, qu'est-ce qui occupe le plus ton cœur ?",choices:[
+    {t:"Mon rapport à moi-même",d:"mon corps, ma beauté, ma valeur, la confiance",sphere:"A"},
+    {t:"L'amour et les liens",d:"me sentir aimée, entourée, reconnue, moins seule",sphere:"B"},
+    {t:"Ce que j'attends et qui ne vient pas",d:"un enfant, un projet, de quoi vivre, une porte qui s'ouvre",sphere:"C"},
+    {t:"Une épreuve, une douleur, une peur",d:"la maladie, la perte, l'angoisse, quelque chose de cassé",sphere:"D"},
+    {t:"Une faute, un poids sur la conscience",d:"la honte, le besoin de revenir, d'être pardonnée",sphere:"E"},
+    {t:"Un manque de sens ou de direction",d:"je ne sais plus où je vais, je doute, je cherche la lumière",sphere:"F"},
+    {t:"Une envie de Le connaître, de L'aimer plus grand",d:"un élan vers Sa grandeur, Sa beauté, Le contempler",sphere:"G"}
+]};
 
-// Questions spécifiques par zone : 3 par zone (situations concrètes), chaque choix = points
-const QZONE = {
+const QSPHERE={
   A:[
-    {q:"Cette douleur, où la ressens-tu le plus ?", choices:[
-      {t:"Dans mon corps : une maladie, une fatigue physique, un mal qui dure", s:{Al_Shafi:3}},
-      {t:"Dans mon cœur : une peine, une angoisse qui me serre la poitrine", s:{Al_Moumine:2,Al_Shafi:1}},
-      {t:"Dans ma vie : quelque chose s'est cassé, brisé autour de moi", s:{Al_Jabbar:3}},
-      {t:"Partout à la fois : je suis vidée, à bout", s:{As_Sabur:2,Al_Hayy:1}} ]},
-    {q:"Quand tu te réveilles le matin, qu'est-ce qui te pèse en premier ?", choices:[
-      {t:"L'idée de devoir affronter encore cette douleur aujourd'hui", s:{As_Sabur:3}},
-      {t:"Une peur diffuse, sans raison précise", s:{Al_Moumine:3}},
-      {t:"Le constat que rien ne se répare, que c'est toujours cassé", s:{Al_Jabbar:2,Al_Hayy:1}},
-      {t:"Une lourdeur dans le corps, comme si je n'avais plus d'énergie", s:{Al_Shafi:2,Al_Hayy:1}} ]},
-    {q:"Ce que tu espères secrètement, c'est…", choices:[
-      {t:"Être guérie, retrouver la santé", s:{Al_Shafi:3}},
-      {t:"Retrouver la paix intérieure, ne plus avoir peur", s:{Al_Moumine:3}},
-      {t:"Que ce qui est cassé soit remis, recollé", s:{Al_Jabbar:3}},
-      {t:"Tenir jusqu'à ce que ça passe, sans m'effondrer", s:{As_Sabur:3}} ]}
+    {q:"Quand tu penses à toi en ce moment, qu'est-ce qui revient le plus ?",choices:[
+      {t:"Je ne me trouve pas belle, je me compare aux autres",s:{Al_Jamil:3}},
+      {t:"Je doute de ma valeur, j'ai l'impression de ne pas être \"assez\"",s:{Al_Karim:3}},
+      {t:"Je n'aime pas la façon dont je suis faite",s:{Al_Moussawwir:3}},
+      {t:"J'ai besoin de me sentir aimée pour exister",s:{Al_Wadud:3}}
+    ]},
+    {q:"Où cherches-tu, sans le vouloir, à combler ce manque ?",choices:[
+      {t:"Dans le regard et l'approbation des autres",s:{Al_Karim:2,Al_Wadud:1}},
+      {t:"Dans les miroirs, les photos, l'apparence",s:{Al_Jamil:2,Al_Moussawwir:1}},
+      {t:"Dans les relations, en cherchant qu'on me choisisse",s:{Al_Wadud:2,Al_Karim:1}},
+      {t:"Je n'arrive pas à le combler, justement",s:{Al_Moussawwir:1,Al_Jamil:1}}
+    ]},
+    {q:"Ce qui apaiserait vraiment ton cœur, ce serait…",choices:[
+      {t:"Savoir que la vraie beauté vient de Lui, pas du reflet",s:{Al_Jamil:3}},
+      {t:"Sentir que ma valeur m'est donnée, pas méritée",s:{Al_Karim:3}},
+      {t:"Me réconcilier avec la forme qu'Il a choisie pour moi",s:{Al_Moussawwir:3}},
+      {t:"Me sentir aimée d'un amour qui ne dépend de rien",s:{Al_Wadud:3}}
+    ]}
   ],
   B:[
-    {q:"Quand tu penses à cette faute, qu'est-ce qui domine ?", choices:[
-      {t:"La honte : j'ai du mal à me tourner vers Lui", s:{At_Tawwab:3}},
-      {t:"L'impression de recommencer toujours la même chose", s:{Al_Ghaffar:3}},
-      {t:"Le désir que ça disparaisse totalement", s:{Al_Afouww:3}},
-      {t:"La peur que les autres l'apprennent", s:{As_Sittir:3}},
-      {t:"La crainte d'être punie pour ça", s:{Al_Halim:3}} ]},
-    {q:"Si tu pouvais entendre une phrase de Lui maintenant, ce serait…", choices:[
-      {t:"« Reviens, la porte est ouverte »", s:{At_Tawwab:3}},
-      {t:"« Je te pardonne, encore une fois »", s:{Al_Ghaffar:3}},
-      {t:"« C'est effacé, n'y pense plus »", s:{Al_Afouww:3}},
-      {t:"« Personne ne le saura, Je te couvre »", s:{As_Sittir:3}},
-      {t:"« Je ne me presse pas, prends le temps de te corriger »", s:{Al_Halim:3}} ]},
-    {q:"Concrètement, qu'est-ce qui te bloque le plus aujourd'hui ?", choices:[
-      {t:"Je n'arrive pas à faire le premier pas du retour", s:{At_Tawwab:2,As_Sittir:1}},
-      {t:"Je me décourage de mes rechutes répétées", s:{Al_Ghaffar:2,Al_Halim:1}},
-      {t:"Le poids du passé que je traîne encore", s:{Al_Afouww:2}},
-      {t:"La peur du regard des autres sur moi", s:{As_Sittir:2}} ]}
+    {q:"Ce manque dans tes liens, il ressemble surtout à…",choices:[
+      {t:"Je cherche l'amour chez les gens, je me sens mal-aimée",s:{Al_Wadud:3}},
+      {t:"Je donne beaucoup mais personne ne le reconnaît",s:{As_Shakour:3}},
+      {t:"Je me sens seule, même entourée",s:{Al_Qarib:3}},
+      {t:"On me traite avec dureté, je manque de douceur",s:{Ar_Rauf:2,Al_Barr:1}}
+    ]},
+    {q:"Dans ta journée, ça se manifeste comment ?",choices:[
+      {t:"J'attends des messages, de l'attention qui ne viennent pas",s:{Al_Wadud:2,Al_Qarib:1}},
+      {t:"Mes efforts passent inaperçus, ça m'épuise",s:{As_Shakour:3}},
+      {t:"Je me sens à l'écart, oubliée",s:{Al_Qarib:2,Ar_Rauf:1}},
+      {t:"Je reçois de la froideur là où j'espérais de la tendresse",s:{Ar_Rauf:2,Al_Barr:2}}
+    ]},
+    {q:"Ce qui comblerait ton cœur en premier, ce serait…",choices:[
+      {t:"Me sentir aimée d'un amour qui ne me lâche pas",s:{Al_Wadud:3}},
+      {t:"Savoir que rien de ce que je donne ne se perd",s:{As_Shakour:3}},
+      {t:"Sentir une présence proche quand je suis seule",s:{Al_Qarib:3}},
+      {t:"Recevoir une douceur, une bonté qui m'enveloppe",s:{Ar_Rauf:2,Al_Barr:2}}
+    ]}
   ],
   C:[
-    {q:"Ce flou, il porte sur quoi concrètement ?", choices:[
-      {t:"Une décision que je dois prendre et je ne sais pas laquelle", s:{Al_Hadi:3}},
-      {t:"Un sens que je ne trouve plus, tout me semble obscur", s:{An_Nur:3}},
-      {t:"Une situation bloquée dont je ne vois pas l'issue", s:{Al_Fattah:3}},
-      {t:"Un « pourquoi ça m'arrive » qui me ronge", s:{Al_Hakim:3}},
-      {t:"Des doutes qui ébranlent mes certitudes", s:{Al_Haqq:3}} ]},
-    {q:"Le soir, quand tu y penses, qu'est-ce qui revient ?", choices:[
-      {t:"« Quel chemin dois-je prendre ? »", s:{Al_Hadi:3}},
-      {t:"« Pourquoi je ne vois plus clair en moi ? »", s:{An_Nur:3}},
-      {t:"« Quand est-ce que ça va se débloquer ? »", s:{Al_Fattah:3}},
-      {t:"« Qu'est-ce que je suis censée comprendre ? »", s:{Al_Hakim:3}},
-      {t:"« Et si je m'étais trompée sur tout ? »", s:{Al_Haqq:3}} ]},
-    {q:"Ce qui t'aiderait le plus là, maintenant, ce serait…", choices:[
-      {t:"Un signe clair sur la direction à suivre", s:{Al_Hadi:2,An_Nur:1}},
-      {t:"Une lumière intérieure pour y voir clair", s:{An_Nur:2,Al_Hakim:1}},
-      {t:"Qu'une porte s'ouvre enfin", s:{Al_Fattah:2}},
-      {t:"Un sol solide, une certitude à laquelle me tenir", s:{Al_Haqq:2,Al_Hakim:1}} ]}
+    {q:"Ce que tu attends et qui ne vient pas, c'est plutôt…",choices:[
+      {t:"Un enfant",s:{Al_Khaliq:3}},
+      {t:"De quoi vivre, plus de moyens",s:{Ar_Razzaq:2,Al_Ghaniyy:1}},
+      {t:"Un projet, une situation bloquée qui se débloque",s:{Al_Fattah:3}},
+      {t:"Quelque chose qui me paraît tout simplement impossible",s:{Al_Qadir:3}}
+    ]},
+    {q:"Quand tu y penses, qu'est-ce qui domine ?",choices:[
+      {t:"L'impression que c'est hors de ma portée, que ça ne dépend pas de moi",s:{Al_Khaliq:2,Al_Qadir:1}},
+      {t:"La peur de manquer, l'angoisse matérielle",s:{Ar_Razzaq:3}},
+      {t:"Le fait de dépendre des autres, de ne pas être autonome",s:{Al_Ghaniyy:3}},
+      {t:"Le sentiment d'être face à un mur fermé",s:{Al_Fattah:3}}
+    ]},
+    {q:"Ce que tu voudrais pouvoir te rappeler, c'est…",choices:[
+      {t:"Que Lui seul crée ce qui n'existe pas encore",s:{Al_Khaliq:3}},
+      {t:"Que ma subsistance est garantie par Lui",s:{Ar_Razzaq:3}},
+      {t:"Qu'Il est le Riche, et que je peux ne dépendre que de Lui",s:{Al_Ghaniyy:3}},
+      {t:"Que ce qu'Il ouvre, personne ne peut le fermer",s:{Al_Fattah:2,Al_Qadir:1}}
+    ]}
   ],
   D:[
-    {q:"Cette peur ou ce doute, ils portent sur quoi ?", choices:[
-      {t:"Un danger précis dont je veux être protégée", s:{Al_Hafidh:3}},
-      {t:"Une charge trop lourde que je n'arrive plus à porter", s:{Al_Wakil:3}},
-      {t:"Une situation qui semble impossible à débloquer", s:{Al_Qadir:3}},
-      {t:"Une injustice subie, j'attends que mon droit triomphe", s:{Al_Ghalib:3}},
-      {t:"Le sentiment d'être seule à affronter tout ça", s:{Al_Mawla:2,An_Nassir:1}} ]},
-    {q:"Quand l'angoisse monte, qu'est-ce qui se passe en toi ?", choices:[
-      {t:"Je veux tout contrôler et je n'y arrive pas", s:{Al_Wakil:3,Al_Hayy:1}},
-      {t:"Je rumine la nuit, je n'arrive plus à dormir", s:{Al_Hayy:3}},
-      {t:"Je me sens petite face à plus grand que moi", s:{Al_Qadir:2,Al_Ghalib:1}},
-      {t:"Je me sens sans défense, sans appui", s:{Al_Hafidh:2,An_Nassir:1}} ]},
-    {q:"Ce dont tu as le plus besoin d'entendre, c'est…", choices:[
-      {t:"« Je te garde »", s:{Al_Hafidh:3}},
-      {t:"« Confie-Moi tout, Je m'en charge »", s:{Al_Wakil:3}},
-      {t:"« Rien ne M'est impossible »", s:{Al_Qadir:3}},
-      {t:"« Je te défendrai »", s:{An_Nassir:2,Al_Ghalib:1}},
-      {t:"« Je suis ton allié, tu n'es pas seule »", s:{Al_Mawla:3}} ]}
+    {q:"Cette épreuve, où la ressens-tu le plus ?",choices:[
+      {t:"Dans mon corps ou mon cœur : une maladie, une douleur qui dure",s:{As_Shafi:3}},
+      {t:"Dans une peur, une angoisse qui ne me lâche pas",s:{Al_Moumine:3}},
+      {t:"Dans quelque chose de cassé, de brisé autour de moi",s:{Al_Jabbar:3}},
+      {t:"Dans une fatigue profonde, ça dure depuis trop longtemps",s:{As_Sabur:2,Al_Hayy:1}}
+    ]},
+    {q:"Le matin au réveil, qu'est-ce qui pèse en premier ?",choices:[
+      {t:"L'idée d'affronter encore cette douleur aujourd'hui",s:{As_Sabur:2,As_Shafi:1}},
+      {t:"Une peur diffuse, sans raison précise",s:{Al_Moumine:3}},
+      {t:"Le constat que rien ne se répare",s:{Al_Jabbar:2,Al_Hayy:1}},
+      {t:"L'anxiété, les soucis qui tournent en boucle",s:{Al_Hayy:3}}
+    ]},
+    {q:"Ce que ton cœur réclame le plus, c'est…",choices:[
+      {t:"Être guérie, retrouver la paix du corps et du cœur",s:{As_Shafi:3}},
+      {t:"Ne plus avoir peur, me sentir en sécurité",s:{Al_Moumine:3}},
+      {t:"Que ce qui est brisé soit remis",s:{Al_Jabbar:3}},
+      {t:"Tenir sans m'effondrer, et qu'Il améliore ma situation",s:{As_Sabur:2,Al_Hayy:2}}
+    ]}
   ],
   E:[
-    {q:"Ce manque, il ressemble surtout à…", choices:[
-      {t:"Le sentiment qu'Il est loin, absent", s:{Al_Qarib:3}},
-      {t:"L'impression que mes prières restent sans réponse", s:{Al_Moujib:3}},
-      {t:"Le sentiment de parler dans le vide, sans être entendue", s:{As_Sami:3}},
-      {t:"Un manque d'amour, de ne pas être aimée", s:{Al_Wadud:3}},
-      {t:"Un manque matériel : moyens, ressources, sécurité", s:{Ar_Razzaq:2,Al_Kafi:1}} ]},
-    {q:"Dans ta journée, ce manque se manifeste comment ?", choices:[
-      {t:"Je me sens seule même entourée", s:{Al_Qarib:2,Al_Wadud:1}},
-      {t:"J'invoque mais j'ai l'impression que rien ne vient", s:{Al_Moujib:3}},
-      {t:"Je garde tout pour moi, je n'arrive pas à exprimer", s:{As_Sami:2}},
-      {t:"Je m'inquiète de ne pas avoir assez pour vivre", s:{Ar_Razzaq:2,Al_Kafi:1}},
-      {t:"Je me sens vide, lasse, à court de tout", s:{Al_Waassi:2,As_Sabur:1}} ]},
-    {q:"Ce qui comblerait ton cœur en premier, ce serait…", choices:[
-      {t:"Sentir Sa présence tout près de moi", s:{Al_Qarib:3}},
-      {t:"Une réponse claire à ce que je demande", s:{Al_Moujib:2,As_Sami:1}},
-      {t:"Me sentir aimée, profondément", s:{Al_Wadud:3}},
-      {t:"Voir mes besoins concrets enfin couverts", s:{Ar_Razzaq:2,Al_Wahhab:1,Al_Kafi:1}},
-      {t:"Être traitée avec une générosité qui dépasse mon mérite", s:{Al_Karim:3}} ]}
+    {q:"Quand tu penses à cette faute, qu'est-ce qui domine ?",choices:[
+      {t:"La honte : j'ai du mal à me tourner vers Lui",s:{At_Tawwab:3}},
+      {t:"L'impression de recommencer toujours la même chose",s:{Al_Ghaffar:3}},
+      {t:"Le désir que ça disparaisse totalement",s:{Al_Afouww:3}},
+      {t:"La peur que les autres l'apprennent",s:{As_Sittir:3}},
+      {t:"La crainte d'être punie",s:{Al_Halim:3}}
+    ]},
+    {q:"Si tu pouvais entendre une phrase de Lui maintenant…",choices:[
+      {t:"« Reviens, la porte est ouverte »",s:{At_Tawwab:3}},
+      {t:"« Je te pardonne, encore une fois »",s:{Al_Ghaffar:3}},
+      {t:"« C'est effacé, n'y pense plus »",s:{Al_Afouww:3}},
+      {t:"« Personne ne le saura, Je te couvre »",s:{As_Sittir:3}},
+      {t:"« Je ne me hâte pas, prends le temps de te corriger »",s:{Al_Halim:3}}
+    ]}
+  ],
+  F:[
+    {q:"Ce flou, il porte sur quoi concrètement ?",choices:[
+      {t:"Une décision à prendre, et je ne sais pas laquelle",s:{Al_Hadi:3}},
+      {t:"Un sens que je ne trouve plus, tout est obscur",s:{An_Nur:3}},
+      {t:"Un « pourquoi ça m'arrive » qui me ronge",s:{Al_Hakim:3}},
+      {t:"Des doutes qui ébranlent mes certitudes",s:{Al_Haqq:3}},
+      {t:"Une situation bloquée dont je ne vois pas l'issue",s:{Al_Fattah:3}}
+    ]},
+    {q:"Ce qui t'aiderait le plus, là, maintenant…",choices:[
+      {t:"Un signe clair sur la direction à suivre",s:{Al_Hadi:3}},
+      {t:"Une lumière intérieure pour y voir clair",s:{An_Nur:3}},
+      {t:"Comprendre le sens caché de ce qui m'arrive",s:{Al_Hakim:3}},
+      {t:"Un sol ferme, une certitude à laquelle me tenir",s:{Al_Haqq:3}},
+      {t:"Qu'une porte s'ouvre enfin",s:{Al_Fattah:3}}
+    ]}
+  ],
+  G:[
+    {q:"Vers quelle facette de Lui ton cœur a-t-il envie de se tourner ?",choices:[
+      {t:"Sa puissance, Sa force que rien n'atteint",s:{Al_Aziz:2,Al_Qawiyy:1}},
+      {t:"Sa grandeur, Sa majesté immense",s:{Al_Kabir:2,Al_Madjid:1}},
+      {t:"Sa royauté : Il règne sur tout",s:{Al_Malik:3}},
+      {t:"Sa perfection, Sa beauté",s:{Al_Jamil:2,Al_Hamid:1}},
+      {t:"Son unicité, qu'Il se suffit à Lui-même",s:{Al_Ahad:2,As_Samad:1}}
+    ]},
+    {q:"Ce qui ferait vibrer ton cœur, ce serait de méditer…",choices:[
+      {t:"Que rien ni personne ne peut Lui résister",s:{Al_Aziz:2,Al_Qawiyy:2}},
+      {t:"Que toute la création Le glorifie sans cesse",s:{Al_Kabir:2,Al_Madjid:2}},
+      {t:"Que tout ce qui existe Lui appartient",s:{Al_Malik:3}},
+      {t:"Que toute beauté n'est qu'un reflet de la Sienne",s:{Al_Jamil:3}},
+      {t:"Qu'Il n'a besoin de rien, et que tout a besoin de Lui",s:{As_Samad:2,Al_Ahad:1}}
+    ]},
+    {q:"Et ce que tu voudrais que cela fasse grandir en toi…",choices:[
+      {t:"Une confiance totale : m'appuyer sur Sa force",s:{Al_Qawiyy:2,Al_Aziz:1}},
+      {t:"L'émerveillement, l'envie de Le glorifier",s:{Al_Madjid:2,Al_Kabir:1}},
+      {t:"La soumission paisible à Son ordre",s:{Al_Malik:2,As_Samad:1}},
+      {t:"La louange, la gratitude pour Sa perfection",s:{Al_Hamid:3}},
+      {t:"Un amour pur, tourné vers Lui seul",s:{Al_Ahad:2,Al_Jamil:1}}
+    ]}
   ]
 };
 
-// 2 questions transversales (Q5, Q6) communes à toutes les zones, qui départagent les ex æquo
-const QCOMMON = [
-  {q:"Quand tu te tournes vers Allah en ce moment, qu'attends-tu de Lui avant tout ?", choices:[
-    {t:"Qu'Il agisse, qu'Il change concrètement ma situation", s:{Al_Jabbar:1,Al_Fattah:1,Al_Qadir:1,Ar_Razzaq:1,Al_Shafi:1,Al_Ghalib:1}},
-    {t:"Qu'Il m'apaise, qu'Il calme ce qui s'agite en moi", s:{Al_Moumine:1,Al_Hayy:1,As_Sabur:1,Al_Qarib:1,Al_Halim:1}},
-    {t:"Qu'Il me pardonne, qu'Il allège ma conscience", s:{At_Tawwab:1,Al_Ghaffar:1,Al_Afouww:1,As_Sittir:1}},
-    {t:"Qu'Il m'éclaire, qu'Il me montre quoi faire", s:{Al_Hadi:1,An_Nur:1,Al_Hakim:1,Al_Haqq:1}},
-    {t:"Qu'Il soit simplement là, proche de moi", s:{Al_Qarib:1,Al_Moujib:1,As_Sami:1,Al_Wadud:1,Al_Mawla:1}} ]},
-  {q:"Et au fond, ce que ton cœur réclame le plus, c'est…", choices:[
-    {t:"De la force pour tenir et avancer", s:{As_Sabur:1,Al_Qadir:1,Al_Ghalib:1,An_Nassir:1,Al_Hayy:1}},
-    {t:"De la douceur et de la tendresse", s:{Al_Wadud:1,Al_Halim:1,Al_Qarib:1,Ar_Razzaq:1,Al_Karim:1}},
-    {t:"De la clarté et du sens", s:{Al_Hadi:1,An_Nur:1,Al_Hakim:1,Al_Haqq:1,Al_Fattah:1}},
-    {t:"De la sécurité et de la protection", s:{Al_Hafidh:1,Al_Wakil:1,Al_Moumine:1,Al_Mawla:1,Al_Kafi:1}},
-    {t:"D'être lavée, allégée, recommencer à neuf", s:{At_Tawwab:1,Al_Ghaffar:1,Al_Afouww:1,As_Sittir:1,Al_Shafi:1}} ]}
-];
-
-let zone=null, qIndex=0, scores={}, history=[];
 let leadData={prenom:"",nom:"",email:""};
+let sphere=null, qIndex=0, scores={}, history=[];
 
 function goToCapture(){
   document.getElementById('screen-intro').style.display='none';
   document.getElementById('screen-result').style.display='none';
   document.getElementById('screen-quiz').style.display='none';
   const c=document.getElementById('screen-capture');
-  c.style.display='block';
-  c.classList.remove('fade-in'); void c.offsetWidth; c.classList.add('fade-in');
+  c.style.display='block'; c.classList.remove('fade-in'); void c.offsetWidth; c.classList.add('fade-in');
 }
 
 function submitCapture(){
@@ -318,137 +332,103 @@ function submitCapture(){
   const consent=document.getElementById('cap-consent').checked;
   const err=document.getElementById('cap-error');
   const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  if(!prenom){ err.textContent="Indique ton prénom, s'il te plaît."; return; }
-  if(!emailOk){ err.textContent="Vérifie ton adresse e-mail."; return; }
+  if(!prenom){ err.textContent="Indique ton pr\u00e9nom, s'il te pla\u00eet."; return; }
+  if(!emailOk){ err.textContent="V\u00e9rifie ton adresse e-mail."; return; }
   if(!consent){ err.textContent="Coche la case pour continuer."; return; }
   err.textContent="";
-
   leadData={prenom,nom,email};
-
-  // Désactiver le bouton le temps de l'envoi
   const btn=document.querySelector('#screen-capture .btn-primary');
-  if(btn){ btn.disabled=true; btn.textContent="Un instant…"; }
-
-  // ── Envoi vers MailerLite via formulaire réel ciblant un iframe caché ──
-  // (méthode fiable cross-origin : le navigateur soumet un vrai <form>,
-  //  la réponse atterrit dans l'iframe invisible, MailerLite enregistre l'inscription)
+  if(btn){ btn.disabled=true; btn.textContent="Un instant\u2026"; }
   try {
     var iframe=document.getElementById('ml-sink');
-    if(!iframe){
-      iframe=document.createElement('iframe');
-      iframe.name='ml-sink';
-      iframe.id='ml-sink';
-      iframe.style.display='none';
-      document.body.appendChild(iframe);
-    }
+    if(!iframe){ iframe=document.createElement('iframe'); iframe.name='ml-sink'; iframe.id='ml-sink'; iframe.style.display='none'; document.body.appendChild(iframe); }
     var f=document.createElement('form');
     f.action="https://assets.mailerlite.com/jsonp/2407614/forms/189373457677419789/subscribe";
-    f.method="post";
-    f.target="ml-sink";
-    f.style.display='none';
+    f.method="post"; f.target="ml-sink"; f.style.display='none';
     function addField(name,val){ var i=document.createElement('input'); i.type='hidden'; i.name=name; i.value=val; f.appendChild(i); }
-    addField("fields[email]", email);
-    addField("fields[name]", prenom);
-    addField("fields[last_name]", nom);
-    addField("ml-submit", "1");
-    addField("anticsrf", "true");
-    document.body.appendChild(f);
-    f.submit();
-  } catch(e){ /* on continue quoi qu'il arrive */ }
-
-  // On laisse 1,2s à l'envoi puis on passe au quiz
+    addField("fields[email]", email); addField("fields[name]", prenom); addField("fields[last_name]", nom);
+    addField("ml-submit", "1"); addField("anticsrf", "true");
+    document.body.appendChild(f); f.submit();
+  } catch(e){}
   setTimeout(proceedToQuiz, 1200);
 }
 
 function proceedToQuiz(){
   const btn=document.querySelector('#screen-capture .btn-primary');
-  if(btn){ btn.disabled=false; btn.textContent="Découvrir mon cheminement"; }
+  if(btn){ btn.disabled=false; btn.textContent="D\u00e9couvrir mon cheminement"; }
   document.getElementById('screen-capture').style.display='none';
   startQuiz();
 }
 
 function startQuiz(){
-  zone=null; qIndex=0; scores={}; history=[];
+  sphere=null; qIndex=0; scores={}; history=[];
+  Object.keys(NOMS).forEach(k=>scores[k]=0);
   document.getElementById('screen-intro').style.display='none';
   document.getElementById('screen-result').style.display='none';
   document.getElementById('screen-quiz').style.display='block';
   renderQ1();
 }
 
-function getSequence(){
-  // returns array of question objects for current zone (after zone chosen)
-  if(!zone) return [];
-  return [...QZONE[zone], ...QCOMMON]; // 3 + 2 = 5 questions after Q1 => 6 total
-}
+function totalSteps(){ return sphere ? (1 + QSPHERE[sphere].length) : 4; }
 
 function renderProgress(step){
-  document.getElementById('progress-fill').style.width = Math.round((step/6)*100)+'%';
-  document.getElementById('question-counter').textContent = 'Question '+step+' / 6';
+  document.getElementById('progress-fill').style.width = Math.round((step/totalSteps())*100)+'%';
+  document.getElementById('question-counter').textContent = 'Question '+step+(sphere?(' / '+totalSteps()):'');
 }
 
 function renderQ1(){
+  sphere=null;
   renderProgress(1);
-  showQuestion(Q1.q, Q1.choices, (c)=>{
-    zone=c.zone; qIndex=0;
-    // init scores for the whole NOMS set (so common questions can add to any)
-    scores={}; Object.keys(NOMS).forEach(k=>scores[k]=0);
-    history=[{type:'q1'}];
-    renderZoneQuestion();
-  });
-}
-
-function renderZoneQuestion(){
-  const seq=getSequence();
-  if(qIndex>=seq.length){ showResult(); return; }
-  renderProgress(qIndex+2); // Q1 done, so question 2..6
-  const q=seq[qIndex];
-  showQuestion(q.q, q.choices, (c)=>{
-    // apply score
-    if(c.s){ Object.keys(c.s).forEach(k=>{ scores[k]=(scores[k]||0)+c.s[k]; }); }
-    history.push({type:'q', applied:c.s||{}});
-    qIndex++;
-    renderZoneQuestion();
-  });
-}
-
-function showQuestion(text, choices, onPick){
   const qEl=document.getElementById('question-text');
-  qEl.innerHTML=text; qEl.classList.remove('fade-in'); void qEl.offsetWidth; qEl.classList.add('fade-in');
+  qEl.innerHTML=Q1.q; qEl.classList.remove('fade-in'); void qEl.offsetWidth; qEl.classList.add('fade-in');
   const cEl=document.getElementById('choices'); cEl.innerHTML='';
-  choices.forEach(c=>{ const b=document.createElement('button'); b.className='choice-btn'; b.textContent=c.t;
-    b.onclick=()=>{ document.querySelectorAll('.choice-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); setTimeout(()=>onPick(c),340); };
-    cEl.appendChild(b); });
+  Q1.choices.forEach(c=>{
+    const b=document.createElement('button'); b.className='choice-btn';
+    b.innerHTML=c.t+'<span class="choice-desc">'+c.d+'</span>';
+    b.onclick=()=>{ document.querySelectorAll('.choice-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected');
+      setTimeout(()=>{ sphere=c.sphere; qIndex=0; history=[{type:'q1'}]; renderSphereQuestion(); },340); };
+    cEl.appendChild(b);
+  });
   cEl.classList.remove('fade-in'); void cEl.offsetWidth; cEl.classList.add('fade-in');
-  document.getElementById('back-link').style.display = history.length>0 ? 'block':'none';
+  document.getElementById('back-link').style.display='none';
+}
+
+function renderSphereQuestion(){
+  const seq=QSPHERE[sphere];
+  if(qIndex>=seq.length){ showResult(); return; }
+  renderProgress(qIndex+2);
+  const q=seq[qIndex];
+  const qEl=document.getElementById('question-text');
+  qEl.innerHTML=q.q; qEl.classList.remove('fade-in'); void qEl.offsetWidth; qEl.classList.add('fade-in');
+  const cEl=document.getElementById('choices'); cEl.innerHTML='';
+  q.choices.forEach(c=>{
+    const b=document.createElement('button'); b.className='choice-btn'; b.textContent=c.t;
+    b.onclick=()=>{ document.querySelectorAll('.choice-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected');
+      setTimeout(()=>{ if(c.s){ Object.keys(c.s).forEach(k=>{ scores[k]=(scores[k]||0)+c.s[k]; }); } history.push({type:'q',applied:c.s||{}}); qIndex++; renderSphereQuestion(); },340); };
+    cEl.appendChild(b);
+  });
+  cEl.classList.remove('fade-in'); void cEl.offsetWidth; cEl.classList.add('fade-in');
+  document.getElementById('back-link').style.display='block';
 }
 
 function goBack(){
   if(history.length===0) return;
   const last=history.pop();
-  if(last.type==='q1'){ // back to Q1
-    zone=null; qIndex=0; renderQ1(); return;
-  }
+  if(last.type==='q1'){ renderQ1(); return; }
   if(last.type==='q'){
-    // undo applied scores
     if(last.applied){ Object.keys(last.applied).forEach(k=>{ scores[k]-=last.applied[k]; }); }
     qIndex--;
-    if(qIndex<0){ // back to Q1
-      zone=null; qIndex=0; renderQ1(); return;
-    }
-    renderZoneQuestion();
+    if(qIndex<0){ renderQ1(); return; }
+    renderSphereQuestion();
   }
 }
 
 function showResult(){
-  renderProgress(6);
-  // restrict ranking primarily to zone pool, but common questions may have boosted; we rank within pool + any tie
-  const pool=ZONES[zone].pool;
-  // build ranking among pool
+  renderProgress(totalSteps());
+  const pool=SPHERES[sphere].pool;
   let ranked=pool.slice().sort((a,b)=>(scores[b]||0)-(scores[a]||0));
   const primary=ranked[0];
   let secondary=ranked[1];
-  // only show secondary if it's reasonably close (within 2 pts) and >0
   const showSec = secondary && (scores[secondary]||0)>0 && ((scores[primary]||0)-(scores[secondary]||0))<=2;
   setTimeout(()=>{
     const n=NOMS[primary];
@@ -461,9 +441,8 @@ function showResult(){
     document.getElementById('r-meaning').textContent=n.meaning;
     document.getElementById('r-prayer').innerHTML=n.prayer;
     const secEl=document.getElementById('r-secondary');
-    if(showSec){ const s=NOMS[secondary];
-      secEl.style.display='block';
-      secEl.innerHTML="Un autre Nom t'accompagne de près en ce moment : <span class='sec-name'>"+s.translit+" — "+s.fr+"</span>.";
+    if(showSec){ const s=NOMS[secondary]; secEl.style.display='block';
+      secEl.innerHTML="Un autre Nom t'accompagne de pr\u00e8s en ce moment : <span class='sec-name'>"+s.translit+" \u2014 "+s.fr+"</span>.";
     } else { secEl.style.display='none'; secEl.innerHTML=''; }
     const r=document.getElementById('screen-result'); r.style.display='block';
     r.classList.remove('fade-in'); void r.offsetWidth; r.classList.add('fade-in');
